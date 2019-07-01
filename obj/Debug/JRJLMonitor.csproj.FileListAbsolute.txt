@@ -1,0 +1,10 @@
+C:\Users\Administrator\source\repos\JRJLMonitor\bin\Debug\JRJLMonitor.exe.config
+C:\Users\Administrator\source\repos\JRJLMonitor\bin\Debug\JRJLMonitor.exe
+C:\Users\Administrator\source\repos\JRJLMonitor\bin\Debug\JRJLMonitor.pdb
+C:\Users\Administrator\source\repos\JRJLMonitor\obj\Debug\JRJLMonitor.csprojAssemblyReference.cache
+C:\Users\Administrator\source\repos\JRJLMonitor\obj\Debug\JRJLMonitor.Properties.Resources.resources
+C:\Users\Administrator\source\repos\JRJLMonitor\obj\Debug\JRJLMonitor.csproj.GenerateResource.cache
+C:\Users\Administrator\source\repos\JRJLMonitor\obj\Debug\JRJLMonitor.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\source\repos\JRJLMonitor\obj\Debug\JRJLMonitor.exe
+C:\Users\Administrator\source\repos\JRJLMonitor\obj\Debug\JRJLMonitor.pdb
+C:\Users\Administrator\source\repos\JRJLMonitor\obj\Debug\JRJLMonitor.Monitor.resources
