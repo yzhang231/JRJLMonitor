@@ -25,6 +25,7 @@ namespace JRJLMonitor
             DVRPortNumber = port;
             DVRUserName = username;
             DVRPassword = password;
+            m_bInitSDK = CHCNetSDK.NET_DVR_Init();
         }
         ~Camera()
         {
@@ -34,10 +35,12 @@ namespace JRJLMonitor
         }
         public Boolean Login()
         {
-            if (m_lUserID > 0) return false;
+            if (m_lUserID >= 0) return false;
             CHCNetSDK.NET_DVR_DEVICEINFO_V30 DeviceInfo = new CHCNetSDK.NET_DVR_DEVICEINFO_V30();
             m_lUserID = CHCNetSDK.NET_DVR_Login_V30(DVRIPAddress, DVRPortNumber, DVRUserName, DVRPassword, ref DeviceInfo); ////登录设备 Login the device
-            if (m_lUserID > 0) { return true; } else { return false; }
+            Console.WriteLine(DVRIPAddress + DVRPortNumber + DVRUserName + DVRPassword);
+            if (m_lUserID >= 0) { return true; } else { Console.WriteLine(m_lUserID); return false; }
+            
         }
         public void RealDataCallBack(Int32 lRealHandle, UInt32 dwDataType, IntPtr pBuffer, UInt32 dwBufSize, IntPtr pUser)
         {
@@ -71,8 +74,19 @@ namespace JRJLMonitor
         }
         public void StartRecord(string sVideoFileName) {
             //强制I帧 Make a I frame
-            int lChannel = 1; //通道号 Channel number
-            CHCNetSDK.NET_DVR_MakeKeyFrame(m_lUserID, lChannel);
+            CHCNetSDK.NET_DVR_PREVIEWINFO lpPreviewInfo = new CHCNetSDK.NET_DVR_PREVIEWINFO();
+            lpPreviewInfo.lChannel = 1;//预te览的设备通道
+            lpPreviewInfo.dwStreamType = 0;//码流类型：0-主码流，1-子码流，2-码流3，3-码流4，以此类推
+            lpPreviewInfo.dwLinkMode = 0;//连接方式：0- TCP方式，1- UDP方式，2- 多播方式，3- RTP方式，4-RTP/RTSP，5-RSTP/HTTP 
+            lpPreviewInfo.bBlocked = true; //0- 非阻塞取流，1- 阻塞取流
+            lpPreviewInfo.dwDisplayBufNum = 1; //播放库播放缓冲区最大缓冲帧数
+            lpPreviewInfo.byProtoType = 0;
+            lpPreviewInfo.byPreviewMode = 0;
+            if (RealData == null) { RealData = new CHCNetSDK.REALDATACALLBACK(RealDataCallBack); }//预览实时流回调函数
+            IntPtr pUser = new IntPtr();//用户数据
+            m_lRealHandle = CHCNetSDK.NET_DVR_RealPlay_V40(m_lUserID, ref lpPreviewInfo, null/*RealData*/, pUser);//打开预览 Start live view 
+            Console.WriteLine(m_lRealHandle);
+            CHCNetSDK.NET_DVR_MakeKeyFrame(m_lUserID, 1);
             CHCNetSDK.NET_DVR_SaveRealData(m_lRealHandle, sVideoFileName);//开始录像
         }
         public void StopRecord() {
